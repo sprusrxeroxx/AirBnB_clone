@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import cmd
+from models.base_model import BaseModel
 
 class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb)'
@@ -18,6 +19,13 @@ class HBNBCommand(cmd.Cmd):
 
     def help_EOF(self):
 	    print("\nEOF signal to quit the program\n")
+
+    def do_all(self, id):
+        self.base_class1 = BaseModel()
+        print(self.base_class1)
+
+    def do_save(self, ix):
+         self.base_class1.save() 
 
 if __name__ == '__main__':
     import sys
