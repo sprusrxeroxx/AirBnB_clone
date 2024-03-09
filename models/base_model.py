@@ -49,6 +49,7 @@ class BaseModel:
         return dictForm
 
     def __str__(self):
+         
          return f"{[self.__class__.__name__]} {(self.id)} {self.__dict__}"
 
 
@@ -56,17 +57,28 @@ class BaseModel:
 
          
 if __name__ == "__main__":
+   # creating a class instance and update it with a few attributes
     my_model = BaseModel()
     my_model.name = "Julien Kimba"
     my_model.julien_age = 37
+    print(my_model.id)
     print(my_model)
-    my_model.save_update()
-    print("\n=== dictionary representatio ===\n")
+    print(my_model.created_at)
+    print("\n------- Serialized to dictionary below -------\n")
     my_model_json = my_model.save_dict()
     print(my_model_json)
-    print("\nJSON of my_model:\n")
+    print("\n------ JSON of <'my_model'> below ------\n")
     for key, value in my_model_json.items():
         print("\t{}: ({}) - {}".format(key, type(value), value))
+    print("\n ------ deserialized to an instance below ------\n")
+    #parse in the dictionary to the class constructor for deserialization 
+    new_model = BaseModel(**my_model_json)
+    print(new_model.id)
+    print(new_model)
+    print(new_model.created_at)
+    print("\n------ the two instanceses compared below -----\n")
+    print(new_model is my_model)
+
 
 
 
