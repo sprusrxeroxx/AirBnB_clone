@@ -7,24 +7,24 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb)'
 
     """Quit command to exit the program"""
-    def do_quit(self):
+    def do_quit(self, line):
         return True
 
     def help_quit(self):
 	    print("\nQuit command to exit the program\n")
 
-    def do_EOF(self):
+    def do_EOF(self, line):
         print("\n")
         return True
 
     def help_EOF(self):
 	    print("\nEOF signal to quit the program\n")
 
-    def do_all(self, id):
+    def do_all(self, line):
         self.base_class1 = BaseModel()
         print(self.base_class1)
 
-    def do_save(self, ix):
+    def do_save(self, line):
          self.base_class1.save() 
 
 if __name__ == '__main__':
