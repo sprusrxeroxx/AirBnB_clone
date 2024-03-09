@@ -20,12 +20,12 @@ class HBNBCommand(cmd.Cmd):
     def help_EOF(self):
 	    print("\nEOF signal to quit the program\n")
 
-    def do_all(self, line):
-        self.base_class1 = BaseModel()
-        print(self.base_class1)
+    # def do_all(self, line):
+    #     self.base_class1 = BaseModel()
+    #     print(self.base_class1)
 
-    def do_save(self, line):
-         self.base_class1.save() 
+    # def do_save(self, line):
+    #      self.base_class1.save() 
 
 if __name__ == '__main__':
     import sys
