@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 
-from models.__init__ import storage
+from __init__ import storage
 import datetime
 import uuid
+
 
 """"
     A Base model that defines all common attributes and methods for other classes
@@ -29,12 +30,13 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.datetime.now()
             self.updated_at = datetime.datetime.now()
-            storage.new(self)
+            #storage.new(self)
 
 
     def save_update(self):
+
         self.updated_at = datetime.datetime.now()
-        storage.save
+        #storage.filesave
         return self.updated_at
 
     def save_dict(self):
