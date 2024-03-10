@@ -54,8 +54,3 @@ def reload(self):
                 
     except FileNotFoundError:
         pass
-
-
-if __name__ == "__main__":
-
-
