@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 
-from engine.file_storage import FileStorage
+"""
+links BaseModel and FileStorage to allow persistence
+"""
 
 
+from models.engine.file_storage import FileStorage
 
-# create an instance of Filestorage with the variable 'storage'
+
 storage = FileStorage()
-# call the reload() method on this instance
-#storage.reload()
+storage.reload()
