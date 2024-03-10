@@ -1,56 +1,76 @@
 #!/usr/bin/python3
-from json import dump
-from json import load
+"""
+Module that contains class for storage and persistence between
+sessions which is vital for an application such as this
+"""
+import json
+import os
 
-class FileStorage():
 
-    __filePath = "file.json"
+class FileStorage:
+    """
+    FileStorage class contains methods and private class attributes
+    that handle persistency and storage between sessions. There are
+    methods for adding new json objects to a file, saving and
+    retrieving
+    """
+    __file_path = "file.json"
     __objects = {}
 
-def all(self):
-    # returns the dictionary __objects
-    return FileStorage.__objects
+    def all(self):
+        """
+        This simply returns all objects that have been saved in the
+        form of a dictionary. This is useful for passing between
+        sessions
+        """
+        return FileStorage.__objects
 
-def new(self, obj):
- # set the key-value pair in __objects (class.id as key, obj as the value)
+    def new(self, obj):
+        """
+        Create a new dictionary that will most likely be added to the
+        __objects dictionary as a whole.
+        Args:
+            obj: the new obj to add which will be converted to a
+                dictionary
+        """
+        key_name = "{}.{}".format(type(obj).__name__, obj.id)
+        FileStorage.__objects[key_name] = obj
 
-    FileStorage.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
+    def save(self):
+        """
+        Write the new object to the file that stores all the dictionary
+        entries as a way to save items and persistency
+        """
+        my_dict = {}
+        with open(FileStorage.__file_path, "w", encoding="utf8") as JSONfile:
+            for key, value in FileStorage.__objects.items():
+                my_dict[key] = value.to_dict()
+            json.dump(my_dict, JSONfile)
 
-def save(self):
-    # declaree an empty dictionary to hold the object we are serializing
-    dictObj = {}
-    # loop and grab the objects (key-value pair) we stored in __objects
-    for key, val in FileStorage.__objects.items():
-    # convert the values to a dictionary using our save_to_dict() method
-        dictObj[key] = val.save_dict()
-        # open the file path for writing (serialization)
-        with open(FileStorage.__filePath, "w", encoding="utf-8") as jsonF:                                                   
-        # dump the serialized object into the file
-            dump(dictObj, jsonF)
+    def class_link(self):
+        """
+        Returns a dictionary that contains a map of class names and
+        their respective classes
+        """
+        from models.base_model import BaseModel
 
-def reload(self):
+        cls_link = {
+                "BaseModel": BaseModel
+        }
+        return cls_link
 
-    from base_model import BaseModel
-
-
-    # dictionary to hold all our defined classes (user-defined)
-    definedClasses = {'BaseModel': BaseModel}
-
-    # Attempt to open the Json file in the filePath
-    try:
-        with open(FileStorage.__filePath, encoding="utf-8") as jsonStr:
-        # deserialize the JSON string in the file at the file path
-            deserialized = load(jsonStr)
-            # Iterate over each obj's value in the deserialized dictionary
-            for obj_values in deserialized.values():
-                # get obj's class name from the '__class__' key
-                clsName = obj_values["__class__"]
-            # get the actual class object in the definedClasses dictionary
-                cls_obj = definedClasses[clsName]
-                # Create a new class instance with the object's values as                                                                                                                                                                              
-                # its arguments
-                new(cls_obj(**obj_values))
-    # Catch  FileNotFoundError and ignore if theres no file to deserialize
-                
-    except FileNotFoundError:
-        pass
+    def reload(self):
+        """
+        reads from a file all serialised objects, converts
+        them from json format to a dictionary and assigns the __objects
+        attributed to them
+        """
+        try:
+            with open(FileStorage.__file_path, "r", encoding="utf-8") as file:
+                data = json.load(file)
+                for objs in data.values():
+                    cls_key = objs["__class__"]
+                    cls_name = self.class_link()[cls_key]
+                    self.new(cls_name(**objs))
+        except FileNotFoundError:
+            pass
