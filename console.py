@@ -139,7 +139,28 @@ class HBNBCommand(cmd.Cmd):
                 if update_key == key:
                     setattr(storage.all()[key], flags[2], flags[3])
                     storage.all()[key].save()
+    # HELPERS
+    def extract_arg(self, arg="", msg=""):
+        """Given a string it returns the string itself or extracts
+        the values of the string in between the quotes
 
+        Example:
+            "hello" returns hello
+            'hello' returns hello
+
+        Args:
+            arg: the argument
+            msg: the message to print if extraction unsuccessful
+        """
+        # extract the text between string quotes
+        # now to match the braces for a correct formatted str
+        # IF WE GET A LOT OF RED CHECKS FOR TASK 7 CONSIDER
+        # REMOVING CALLS TO THIS FUNCTION AND JUST PASSING
+        # THEM STRAIGHT AWAY
+        if '"' in arg or '\'' in arg:
+            return arg[1:-1]
+        else:
+            return arg
 
 if __name__ == '__main__':
     import sys
