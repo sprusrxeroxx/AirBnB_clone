@@ -10,9 +10,7 @@ import os
 class FileStorage:
     """
     FileStorage class contains methods and private class attributes
-    that handle persistency and storage between sessions. There are
-    methods for adding new json objects to a file, saving and
-    retrieving
+    that handle persistency and storage between sessions.
     """
     __file_path = "file.json"
     __objects = {}
