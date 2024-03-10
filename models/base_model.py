@@ -1,68 +1,67 @@
 #!/usr/bin/python3
 
-from __init__ import storage
-import datetime
-import uuid
-
-
-""""
-    A Base model that defines all common attributes and methods for other classes
 """
+This module contains the BaseModel class that all other classses
+will inherit common attributes and methods from
+"""
+import models
+from uuid import uuid4
+from datetime import datetime
+
 
 class BaseModel:
-
-
+    """ Defines a class Basemodel from which all subclasses
+    inherit from. This is the ADAM class
+    """
     def __init__(self, *args, **kwargs):
-
+        """ Initialises all public instances attributes for the programm """
 
         if kwargs:
             del kwargs["__class__"]
-            for key, val in kwargs.items():
-
-             # grab date and time stamps and convert them to datetime objec
-                if key == "created_at" or key == "updated_at":
-                    dt_object = datetime.datetime.strftime(val, "%Y-%m-%dT%H:%M:%S.%f")
-                    setattr(self, key, dt_object)
+            for keys, value in kwargs.items():
+                if keys == "updated_at" or keys == "created_at":
+                    # convert its value (previously a str) to datetime object
+                    dt_object = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+                    setattr(self, keys, dt_object)
                 else:
-                    setattr(self, key, val)
-
+                    setattr(self, keys, value)
         else:
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.datetime.now()
-            self.updated_at = datetime.datetime.now()
-            #storage.new(self)
+            self.id = str(uuid4())
+            self.created_at = self.updated_at = datetime.now()
+            models.storage.new(self)
 
+    def save(self):
+        """
+        updates the 'updated_at' attribute to the current time and date
+        """
+        self.updated_at = datetime.now()  # last update
+        return models.storage.save()
 
-    def save_update(self):
-
-        self.updated_at = datetime.datetime.now()
-        #storage.filesave
-        return self.updated_at
-
-    def save_dict(self):
-        dictForm = {}
-
-        dictForm["__class__"] = self.__class__.__name__
-
-        for key, val in self.__dict__.items():
-        # get the values which are of datetime object type
-            if isinstance(val, type(datetime)):
-        #convert them to string objects in ISO format
-                dictForm[key] = val.isoformat()
+    def to_dict(self):
+        """
+        returns a dictionary representation of the
+        class for use in serialization to json objects
+        """
+        my_dict = {}
+        my_dict["__class__"] = self.__class__.__name__
+        # iterate, extract & convert datetime values to a str in ISO format
+        for key, value in self.__dict__.items():
+            if key in ("created_at", "updated_at"):
+                my_dict[key] = value.isoformat()
             else:
-                dictForm[key] = val
-        return dictForm
+                my_dict[key] = value
+        return dict(my_dict)
 
     def __str__(self):
-         
-         return f"{[self.__class__.__name__]} {(self.id)} {self.__dict__}"
-
-
-
-
-         
+        """
+        returns a string representation of the class and its attributes.
+        """
+        return "[{}] ({}) {}".format(
+            type(self).__name__, self.id, self.__dict__
+            )
+    
 if __name__ == "__main__":
-   # creating a class instance and update it with a few attributes
+    # creating a class instance and update it with a few attributes
     my_model = BaseModel()
     my_model.name = "Julien Kimba"
     my_model.julien_age = 37
@@ -70,7 +69,7 @@ if __name__ == "__main__":
     print(my_model)
     print(my_model.created_at)
     print("\n------- Serialized to dictionary below -------\n")
-    my_model_json = my_model.save_dict()
+    my_model_json = my_model.to_dict()
     print(my_model_json)
     print("\n------ JSON of <'my_model'> below ------\n")
     for key, value in my_model_json.items():
@@ -83,7 +82,3 @@ if __name__ == "__main__":
     print(new_model.created_at)
     print("\n------ the two instanceses compared below -----\n")
     print(new_model is my_model)
-
-
-
-
