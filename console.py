@@ -39,7 +39,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             commands = args.split(" ")
 
-            class_name = self.extract_arg(commands[0])
+            class_name = commands[0]
             if class_name in storage.class_link():
                 # create a new instance based on the class name
                 new_instance = storage.class_link()[class_name]()
@@ -48,14 +48,13 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print(self.unknown_class)
 
-    # GOD ABEG
     def do_show(self, args):
-        """ Get and print instance str representation by id and class name"""
+        """ extract and show instance str representation by id and class name"""
         if args == "" or args is None:
             print(self.missing_class)
         else:
             cmds = args.split(" ")
-            cls_name = self.extract_arg(cmds[0])
+            cls_name = cmds[0]
 
             # id arg checker
             if len(cmds) < 2:
@@ -63,7 +62,7 @@ class HBNBCommand(cmd.Cmd):
             elif cls_name not in storage.class_link():
                 print(self.unknown_class)
             else:
-                cls_id = self.extract_arg(cmds[1])
+                cls_id = cmds[1]
                 val = "{}.{}".format(cls_name, cls_id)
 
                 if val in storage.all():
@@ -77,8 +76,8 @@ class HBNBCommand(cmd.Cmd):
             print(self.missing_class)
         else:
             cmds = args.split(" ")
-            cls_name = self.extract_arg(cmds[0])
-            cls_id = self.extract_arg(cmds[1])
+            cls_name = cmds[0]
+            cls_id = cmds[1]
 
             # id arg check
             if len(cmds) < 2:
@@ -103,7 +102,7 @@ class HBNBCommand(cmd.Cmd):
                 my_list.append(str(values))
                 print(my_list)
         else:
-            cmd = self.extract_arg(args.split(" ")[0])
+            cmd = args.split(" ")[0]
 
             # if the cmd doesn't exist don't print it
             if cmd not in storage.class_link():
@@ -120,8 +119,7 @@ class HBNBCommand(cmd.Cmd):
             print(self.missing_class)
         else:
             flags = args.split(" ")
-            update_key = "{}.{}".format(self.extract_arg(flags[0]),
-                                        self.extract_arg(flags[1]))
+            update_key = f"{flags[0]}.{flags[1]}"
             print(update_key)
 
             if len(flags) < 2:
@@ -139,28 +137,6 @@ class HBNBCommand(cmd.Cmd):
                 if update_key == key:
                     setattr(storage.all()[key], flags[2], flags[3])
                     storage.all()[key].save()
-    # HELPERS
-    def extract_arg(self, arg="", msg=""):
-        """Given a string it returns the string itself or extracts
-        the values of the string in between the quotes
-
-        Example:
-            "hello" returns hello
-            'hello' returns hello
-
-        Args:
-            arg: the argument
-            msg: the message to print if extraction unsuccessful
-        """
-        # extract the text between string quotes
-        # now to match the braces for a correct formatted str
-        # IF WE GET A LOT OF RED CHECKS FOR TASK 7 CONSIDER
-        # REMOVING CALLS TO THIS FUNCTION AND JUST PASSING
-        # THEM STRAIGHT AWAY
-        if '"' in arg or '\'' in arg:
-            return arg[1:-1]
-        else:
-            return arg
 
 if __name__ == '__main__':
     import sys
