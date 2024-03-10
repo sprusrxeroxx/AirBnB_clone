@@ -10,7 +10,7 @@ class FileStorage:
 
 def all(self):
     # returns the dictionary __objects
-    return FileStorage__objects
+    return self.FileStorage__objects
 
 def new(self, obj):
  # set the key-value pair in __objects (class.id as key, obj as the value)
@@ -28,8 +28,6 @@ def save(self):
         # dump the serialized object into the file
             dump(dictObj, jsonF)
 
-from json import load
-
 def reload(self):
 
     # dictionary to hold all our defined classes (user-defined)
@@ -37,7 +35,7 @@ def reload(self):
 
     # Attempt to open the Json file in the filePath
     try:
-        with open(FileStorage.__filePath, encoding-"utf-8") as jsonStr:
+        with open(FileStorage.__filePath, encoding="utf-8") as jsonStr:
         # deserialize the JSON string in the file at the file path
             deserialized = load(jsonStr)
             # Iterate over each obj's value in the deserialized dictionary
