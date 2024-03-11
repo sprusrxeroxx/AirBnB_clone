@@ -20,8 +20,10 @@ class BaseModel:
             del kwargs["__class__"]
             for keys, value in kwargs.items():
                 if keys == "updated_at" or keys == "created_at":
-                    # convert its value (previously a str) to datetime object
-                    dt_object = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+                    # convert value from str to datetime object
+                    dt_object = datetime.strptime(
+                            value, "%Y-%m-%dT%H:%M:%S.%f"
+                            )
                     setattr(self, keys, dt_object)
                 else:
                     setattr(self, keys, value)
@@ -59,7 +61,8 @@ class BaseModel:
         return "[{}] ({}) {}".format(
             type(self).__name__, self.id, self.__dict__
             )
-    
+
+
 if __name__ == "__main__":
     # creating a class instance and update it with a few attributes
     my_model = BaseModel()
@@ -75,7 +78,7 @@ if __name__ == "__main__":
     for key, value in my_model_json.items():
         print("\t{}: ({}) - {}".format(key, type(value), value))
     print("\n ------ deserialized to an instance below ------\n")
-    #parse in the dictionary to the class constructor for deserialization 
+    # parse in the dictionary to the class constructor for deserialization
     new_model = BaseModel(**my_model_json)
     print(new_model.id)
     print(new_model)
