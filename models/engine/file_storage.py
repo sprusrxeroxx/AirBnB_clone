@@ -57,7 +57,6 @@ class FileStorage:
         from models.state import State
         from models.review import Review
         from models.amenity import Amenity
-        
 
         cls_link = {
                 "BaseModel": BaseModel,
